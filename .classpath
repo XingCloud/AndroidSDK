@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="com/xingcloud/sfs/*.java" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<accessrules>
+			<accessrule kind="accessible" pattern="**"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="lib" path="depens/android.jar"/>
+	<classpathentry kind="lib" path="libs/xingcloudanalytic.jar"/>
+	<classpathentry kind="lib" path="libs/xingcloudmobilegdp.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<changelog name="Android SDK">
+<version name="1.2.7.1">
+Bug fixed:
+1. 对服务器返回数据强制转码
+
+</version>
+<version name="1.2.7.0">
+New Features:
+1. 数据统计添加ref自定义设置功能
+
+</version>
+<version name="1.2.6.4">
+Bug fixed:
+1. 修复网络异常时GDP初始化失败的问题
+
+</version>
+<version name="1.2.6.3">
+Bug fixed:
+1. 修复人人平台feed发送结果不正确的问题
+
+</version>
+<version name="1.2.6.2">
+New Features:
+1. 网络请求时，会自动添加extraParams参数。可以通过Config来设置extraParams
+
+</version>
+<version name="1.2.6.1">
+New Features:
+1. 数据统计：更新打包log的发送方式
+
+</version>
+<version name="1.2.6.0">
+New Features:
+1. 升级人人sdk
+
+</version>
+<version name="1.2.4.4">
+New Features:
+1. 网络请求添加对NoHttpResponseException的处理
+
+</version>
+<version name="1.2.4.3">
+New Features:
+1. 数据统计添加heartbeat的支持
+
+</version>
+<version name="1.2.3.3">
+Bug fixed:
+1. 修复ENGINE_INITED事件在网络状态异常时会被触发的问题
+
+</version>
+<version name="1.2.3.1">
+Bug fixed:
+1. 修复item.xml中引号字符无法使用的问题
+
+</version>
+<version name="1.2.3.0">
+New Features:
+1. XingCloud添加deinit接口，在重复初始化行云引擎前请调用此接口
+
+Bug fixed:
+1. 修复item.xml中"/"字符无法使用的问题
+
+</version>
+<version name="1.2.2.1">
+New Features:
+1. 添加接口trackHeartbeat(),心跳事件，检测用户是否持续在线
+2. 添加模块，支持用户注册前发送log
+
+</version>
+<version name="1.2.2.0">
+New Features:
+1. 添加接口sendVisitAndQuitOutside，设置后用户登录、退出事件将不会自动发送。如果您需要这两个事件，请通过trackUserEvent来发送
+
+Bug Fixed:
+1. 修复物品文件有时会重复加载的问题
+2. 优化网络请求的内存性能
+
+</version>
+<version name="1.2.1.2">
+Bug Fixed:
+1. 修复物品文件有时会重复加载的问题
+2. 优化网络请求的内存性能
+
+</version>
+<version name="1.2.1.1">
+Bug Fixed:
+1. 数据统计 - 修复tutorial事件的API问题
+
+</version>
+<version name="1.2.1.0">
+New Features:
+1. 增加log信息输出开关，您可以通过XingCloudLogger.OUTPUT_LEVEL来设置输出log的级别。
+2. 数据统计 - 增加tutorial相关的接口，已经buy相关的接口
+
+Bug Fixed:
+1. GDP - 修复新浪微博的bug
+
+</version>
+<version name="1.2.0.1">
+Bug Fixed:
+1. 恢复item/owneditem的package路径
+
+</version>
+<version name="1.2.0.0">
+New Features:
+1. 支持新的代码生成服务
+2. XingCloud上现在不能直接获取ownerUser了，需要通过getOwnerUser()来获取
+
+Bug Fixed:
+1. 修复空格数据导致签名验证失败的问题
+2. 修复用户不存在时回调函数不会触发的问题
+
+</version>
+<version name="1.1.5.3">
+Bug Fixed:
+1. 修复LanguageManager.getText替换文字失败的问题
+
+</version>
+<version name="1.1.5.2">
+Bug Fixed:
+1. 修复数据统计SDK在1.5系统下不兼容的问题
+
+</version>
+<version name="1.1.5.1">
+Bug Fixed:
+1. 修复在没有网络的情况下，统计数据发送时会抛出异常的问题
+
+</version>
+<version name="1.1.5.0">
+New Features:
+1. 支持资源文件初次加载时从本地获取以加速加载时间。详情请参考http://doc.xingcloud.com/display/09/SDK
+2. 对auditchange模式提供了比较完善对支持。auditchange默认开启同步消息队列模式。
+
+</version>
+<version name="1.1.4.2">
+New Features:
+1. 对item.xml数据进行内存优化
+
+</version>
+<version name="1.1.4.1">
+New Features:
+1. 对用户物品数据缓存性能进行优化
+
+</version>
+<version name="1.1.4.0">
+New Features:
+1. Action及AuditChange发送方式增加同步消息队列的模式。这种模式会将消息按照添加进队列的顺序依次发送。也就是会在上一个批次结果返回后再进行下一个批次的发送。此模式默认关闭。您可以通过ActionManager及AuditChangeManager的enableQueued来开启或关闭此模式。另外，如果某一个批次发送失败，您可以通过设置enableQueuedContinueOnError来开启或关闭是否继续发送剩余的存放在队列中的消息。
+
+</version>
+<version name="1.1.3.2">
+Bug Fixed:
+1. 对物品加载失败回调函数添加更多的信息
+
+</version>
+<version name="1.1.3.1">
+Bug Fixed:
+1. 移除对XINGCLOUD_GAME_APPID设置对完全依赖。现在可以不设置这个metadata也能够运行了
+
+</version>
+<version name="1.1.3.0">
+New Features:
+1. IEventListener添加prePerformEvent及postPerformEvent接口，分别在事件执行(performEvent)前和后执行。此改动会带来您代码编译失败，您可以在Problems栏某个错误上点右键，并选择QuickFix来批量修复这个编译问题。
+
+</version>
+<version name="1.1.2.5">
+Bug Fixed:
+1. 修正ENGINE_READY事件分发的时机
+2. 修复默认appid没有正确读取的问题
+
+</version>
+<version name="1.1.2.4">
+Bug Fixed:
+1. 修复EventDispatcher添加事件监听时，回调函数设置为null导致的问题。
+2. 修复数据统计的若干问题
+3. 修复Action多线程环境下有时会丢包的bug
+
+</version>
+<version name="1.1.2.2">
+Bug Fixed:
+1. 添加ENGINE_REDAY事件，在用户信息加载完成并且资源信息加载完成时会触发
+
+</version>
+<version name="1.1.2.1">
+Bug Fixed:
+1. 修复新浪微博不能登出的问题
+
+</version>
+<version name="1.1.2.0">
+New Features:
+1. 对ItemSpecManager部分接口的查询效率进行了优化，包括getGroup、getGroups以及getItem。
+2. 对行云引擎初始化流程进行了优化。现在ENGINE_INITED事件会在引擎初步初始化时就会分发，此时资源文件（item.xml/lang.xml还未加载完成)，因此您无法操作ItemSpec和多语言数据。
+但是您可以在此时就进行用户信息加载流程了（如果使用自主的登陆注册流程的话），或者进行一些游戏自身资源的初始化工作。同时我们会异步开始资源文件的加载工作，完成时会分发RESOURCE_LOADED事件，失败时会分发RESOURCE_LOAD_ERROR事件。
+此时就可以操作ItemSpec数据以及多语言数据了。如果失败，可以调用XingCloud.instance().reloadResource来尝试重新加载资源文件。
+3. 添加了资源文件正确性校验的开关，XingCloud.checkFileValidity。默认开启。
+4. 数据统计平台加入了CrashReport的支持。程序崩溃的错误日志会发送到数据统计平台了。相关内容请参考行云在线文档。
+5. 数据统计平台加入了PageView的支持。相关内容请参考行云在线文档。
+6. 添加了对分发渠道的统计。相关内容请参考行云在线文档。
+
+</version>
+<version name="1.1.1.2">
+New Features:
+1. 新增RESOURCE_LOAD_ERROR事件。在item/lang文件加载失败后会被触发
+</version>
+<version name="1.1.1.1">
+Bug Fixed:
+1. 修复AsObject中添加null数据时的错误
+</version>
+<version name="1.1.1.0">
+New Features:
+1. 数据统计平台功能现在已经完善，部分API进行了修改。相关内容请参考行云在线文档数据统计的部分
+2. 前后台传输的数据现在全部进行了压缩。您可以通过Remoting.zipRemotingContent来开启或关闭数据压缩
+3. 现在对前后台传输的文件数据进行了正确性检测。item/language文件因为网络问题没有加载完成、或文件内容被篡改等文件正确性问题，都会有相应的错误处理。
+4. OwnedItem的uid现在可以由前台产生，不需要等待后台返回uid就可以操作了。相关内容请参考行云在线文档FAQ/SDK的部分
+5. 前台发出的任何请求现在都加入了多语言信息（info中的lang字段），并可以在后台获取。
+6. GDP加入了新浪微博平台，您可以使用新浪微博分享功能了。（现已支持Facebook/Twitter/人人网/新浪微博四个平台）
+
+Bug Fixed:
+1. 修复如byte[]类型的数据在传输给后台时，因json库导致不能正确序列化的问题
+
+</version>
+<version name="1.1.0.3">
+Bug Fixed:
+1. 修复一处可能导致用户信息加载失败的问题
+
+</version>
+<version name="1.1.0.2">
+Bug Fixed:
+1. 网络请求现在加入了超时处理机制。您可以在Remoting中设置超时时间，CONNECTION_TIMEOUT及SO_TIMEOUT。默认为30秒
+2. Action/AuditChange执行如果超时，现在会进入错误的回调函数了。
+
+</version>
+<version name="1.1.0.1">
+Bug Fixed:
+1. 修复初始化行云引擎前无法调用服务的问题
+2. 修复LoginService成功后用户信息无法正确设置的bug
+
+</version>
+<version name="1.1.0.0">
+New Features:
+1. 添加用户账户管理模块，包括注册、登陆等功能。具体内容请参考行云在线文档
+2. 完善Log机制。现在前台Log可以通过logcat查看，tag为"XingCloud"
+3. GDP模块添加人人平台接入功能
+
+</version>
+
+<version name="1.0.3.1">
+Bug Fixed:
+1. 修复编译好的库文件包含了不应当编译进去的文件的问题
+</version>
+<version name="1.0.3.0">
+Bug Fixed:
+
+New Features:
+1. 添加数据统计模块（具体用法请参考http://doc.xingcloud.com/display/09/Android+SDK#AndroidSDK-%E6%95%B0%E6%8D%AE%E7%BB%9F%E8%AE%A1）
+</version>
+<version name="1.0.2.1">
+New Features:
+1. 反射错误时会输出相关信息
+</version>
+<version name="1.0.2.0">
+Bug Fixed:
+
+New Features:
+1. 添加GDP模块（具体用法请参考http://doc.xingcloud.com/display/09/Android+SDK#AndroidSDK-GDP）。此功能需要IDE版本1.0.1.0支持，请更新IDE。
+2. GDP SNS平台接入模块现在支持Facebook及Twitter平台的接入了
+3. 添加GDP本地测试模块
+4. 如果多语言文件格式错误，现在会抛出异常
+5. 默认sig_user可以不填写，此时后台收到的sig_user为空字符串
+
+</version>
+
+<version name="1.0.1.9">
+Bug Fixed:
+1. 修复Array类型数据反射有时会失败的问题
+2. 修复Dictionary类型数据会失败的问题。数据来源为JSON字符串，比如{"key1":"value1","key2":"value2"}
+
+New Features:
+1. Action回掉函数中取得后台返回数据的方式现在修改为了ActionEvent.getData()，获取message/code等也都是直接从ActionEvent中通过相应的getter函数获取
+2. 对AuditChange的track操作修改为由AuditChangeManager负责，现在不需要在userprofile上进行track了。目前只对游戏玩家开启AuditChange，即XingCloud.ownerUser。好友暂时不支持AuditChange
+3. 对AuditChange的commit操作现在也由AuditChangeManager负责。并且API修改为了send
+4. 对SDK体积进行了优化
+5. 现在不需要配置platefrom_app_id和xa_target了。只需要配置sig_user，这个属性用来切换用户
+
+</version>
+
+<version name="1.0.1.8">
+Bug Fixed:
+1. 修复多语言服务有时会失效的问题
+
+</version>
+
+<version name="1.0.1.7">
+Bug Fixed:
+1. 修复getCurrentTarget有时不能正确返回结果的问题
+
+</version>
+<version name="1.0.1.6">
+Bug Fixed:
+1. 修复登陆客户端有时会异常的问题
+
+</version>
+<version name="1.0.1.5">
+Bug Fixed:
+1. 修复有时通过LanguageManager获取多语言信息时会返回空字符串，而不是undefined的问题
+2. 修复反射数组类型数据有时会反射失败的问题
+
+New Features:
+1. 在ElexEvent中添加currentTarget属性，此属性用以标示分发该事件的对象。
+</version>
+<version name="1.0.1.4">
+Bug Fixed:
+1. 在ItemsCollection提供获取数据源的API，getSouce
+2. 移除ItemSpec中无用的属性
+3. 修复反射List/ArrayList类型数据时不能正确赋值的bug
+4. 修复处理AuditChange结果时可能抛出IndexOutOfBoundException的问题
+5. 统一前后台API
+</version>
+<version name="1.0.1.3">
+Bug Fixed:
+1. 修改reflection机制，以同后台json解析库统一
+2. 移除android1.5-2.1系统下不兼容的api getTextContent
+3. 修复数据库没用正确清除并更新的bug
+</version>
+<version name="1.0.1.2">
+Bug Fixed:
+1. 修复建模时添加owneditem类型的数据，加载信息后没用成功赋值的问题。
+2. 修复反射json字符串中带有空数据的数组类型数据时，无法正确解析空数据后的内容的问题。
+3. 移除在加载用户信息后分析item的数据的功能
+</version>
+<version name="1.0.1.1">
+Bug Fixed:
+1. 修复SDK库中某些没有正确移除掉的事件监听。开发者在不需要某个事件监听后也请调用removeEventListener移除对该事件的监听。
+2. 增加对SFS的extension response事件的判断，如果为行云提供的extension，则进行解析，否则不进行解析。
+3. 修复item.xml中存储json字符导致解析失败的问题。
+4. 修复LanguageManager新加载多语言内容无法使用的bug
+</version>
+<version name="1.0.1.0">
+Bug Fixed:
+1. 修复如果不对行云SDK初始化，就调用ItemsParser进行物品文件解析会导致程序崩溃的bug。现在会打印提示信息并返回。
+
+New Features:
+1. Action服务功能完善。现在只需要new出来一个Action，传入相应参数，并执行execute即可。在回调函数中处理服务器的返回值。详情请参见SimpleAction示例工程。
+2. 增加对SFS相关内容的支持。如果通过Config设置sfs_enabled为true，并设置sfs_gateway后，即会自动连接SFS服务器。用户登录、信息加载、Action/AuditChange服务也会自动采用SFS的方式进行请求。详情请参见SimpleActionWithSFS示例工程。
+3. 新增了BasicAuditChange示例工程，用以演示如何使用AuditChange服务
+4. 新增了SimpleAction示例工程，用以演示如何使用Action服务
+5. 新增了SimpleActionWithSFS示例工程，通过Action服务用以演示如何使用SFS服务
+6. 新增了XingCloudEvent.USER_REGISTERED事件，在用户第一次登录（注册）成功后会触发该事件
+7. 多语言服务中提供了更新新语言文件的机制。可以通过LanguageManager的loadLanguageFile接口来更新语言文件。
+</version>
+<version name="1.0.0.0">
+1.0版本相较是一次大升级，以下为从0.9版本SDK迁移到1.0版本SDK的说明
+
+1. 模型驱动开发机制的改动
+建立的模型和核心SDK将会打包成为项目独有的一个独立SDK分发给开发者，并且建模产生的代码将不允许改动（包括继承）。建立出来的模型将只做为一个前后台一致的数据模型而存在，不会包含任何开发者的游戏逻辑。
+
+2. Package和Class命名的改变
+我们将SDK中所有的Elex字样的内容都修改为了XingCloud。包括包路径和类名
+
+3. UserProfile
+3.1 玩家自身的UserProfile将不需要开发者手动创建。通过Xingcloud.ownerUser就可以获取到。
+3.2 如果在XingCloud上设置了autoLogin为true，则登录过程也不需要开发者显示的调用了。如果autoLogin为false，则需要开发者手动调用XingCloud的login接口来实现登录。
+3.3 由于3.2的改动，UserProfile的Login操作已经从UserProfile中移除。UserProfile成为了一个较为独立的模块存在，他既可以表示玩家自身，也可以表示为好友。UserProfile的构造函数参数isOwner即用来标识这个区别。需要加载用户信息时（包括玩家自身或者好友），只要调用已经设置过uid的UserProfile的load接口即可。
+3.4 由于1的改动，现在无法通过继承UserProfile或者修改UserProfile的方式来插入用户逻辑。我们推荐用聚合的方式来管理UserProfile，即行云SDK的UserProfile只做为一个用户数据的存储模型，开发者自己编写一个类来实现所有和用户相关的游戏逻辑。UserProfile作为一个成员变量存放于该类中。
+3.5 XingCloud中新增了一个变量autoLoadItems，用来控制是否自动加载用户的物品数据，如果为true，则会在每次load操作后自动分发请求加载用户的物品信息。如果为false，则需要开发者手动调用物品ItemsCollection的load方法来加载用户的物品数据
+
+4. AuditChange和Action
+现在两种方式已经完全分离。Action需要前台开发者自己填入该操作的参数，后台开发者自己实现相应的解析并返回给前台。AuditChange会自动监听改变并传输给后台。UserProfile的track模式对应的是AuditChange，而不再是一个Action。
+
+5. 多语言模块
+在0.9的基础上，我们加入了自动根据用户机器设置来切换用户语言的机制。如果没有找到相应的语言版本，我们会设置为默认语言（英语）。目前还没有完成自动下载机制，会在1.0.1中加入。（预计本周内会提供）
+
+6. 物品服务内部实现机制的变动
+因为移动平台内存的限制，现在物品文件从服务器下载后自动解析并存储到本地数据库中，保证解析完成后不占用内存。当通过ItemSpecManager获取数据时，会动态从数据库中查询并反射出相应的ItemSpec。反射后重新生成出来的ItemSpec对象的生命周期需要开发者自己来维护。
+</version>
+</changelog>

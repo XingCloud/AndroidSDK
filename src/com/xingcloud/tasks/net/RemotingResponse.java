@@ -21,14 +21,14 @@ public class RemotingResponse {
 	{
 		RemotingResponse response=new RemotingResponse();
 		response.rawData = resp;
-		response.content = new String(resp,Charset.forName("UTF-8"));
+		response.content = new String(resp);
 		return response;
 	}
 
 	public static RemotingResponse fromString(String resp)
 	{
 		RemotingResponse response=new RemotingResponse();
-		response.rawData = resp.getBytes(Charset.forName("UTF-8"));
+		response.rawData = resp.getBytes();
 		response.content = resp;
 		return response;
 	}

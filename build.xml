@@ -1,53 +1,34 @@
 <?xml version="1.0"?>
-<project name="XingCloudAndroid" default="main" basedir="../">
+<project name="XingCloudAndroid" default="main" basedir=".">
+	<!-- sdk output path -->
+	<property name="sdk.jar" value="${basedir}/output/xingcloudandroid.jar"/>
+	<!-- secret key -->
+	<property name="skey" value="#secret_key#" />
+	<!-- consumer key -->
+	<property name="ckey" value="#consumer_key#" />
+	<!-- immigrate from old xingcloud sdk -->
+	<property name="immigrate" value=""/>
 
 	<property name="javac.src" value="1.6"/>
 	<property name="javadoc.path" value="${basedir}/doc"/>
-	<property name="core.path" value="${basedir}/core_sdk" />
+	<property name="core.path" value="${basedir}" />
 	<property name="core.src" value="${core.path}/src"/>
 	<property name="core.classes" value="${core.path}/bin"/>
-	<property name="generated.path" value="${basedir}/gen_code" />
-	<property name="generated.itemspecmodeling.src" value="${generated.path}/itemspecmodeling/src"/>
-	<property name="generated.itemmodeling.src" value="${generated.path}/itemmodeling/src"/>
-	<property name="generated.auditchange.src" value="${generated.path}/auditchange/src"/>
-	<property name="generated.itemspecmodeling.classes" value="${generated.path}/itemspecmodeling/bin"/>
-	<property name="generated.itemmodeling.classes" value="${generated.path}/itemmodeling/bin"/>
-	<property name="generated.auditchange.classes" value="${generated.path}/auditchange/bin"/>
 	<property name="lib.dir" value="${core.path}/libs"/>
-	<property name="sfs_lib.dir" value="${core.path}/sfs_libs"/>
 	<property name="depens.dir" value="${core.path}/depens"/>
-	<property name="sdk.jar" value="${basedir}/xingcloudandroid.jar"/>
-    <property name="key.file" value="${core.src}/com/xingcloud/core/SecurityKey.java" />
-	<property name="build.number" value=""/>
+    <property name="key.path" value="com/xingcloud/core" />
+    <property name="key.class" value="${key.path}/SecurityKey" />
+    <property name="key.file" value="${core.src}/${key.class}.java" />
 	<property name="build.debug" value="true"/>
-	<property name="skey" value="#secret_key#" />
-	<property name="ckey" value="#consumer_key#" />
+	
+	<property name="gencode.path" value="${basedir}/gencode"/>
 
 	<path id="classpath">
 		<fileset dir="${depens.dir}" includes="**/*.jar"/>
 		<fileset dir="${lib.dir}" includes="**/*.jar"/>
-		<!--
-		<fileset dir="${sfs_lib.dir}" includes="**/*.jar"/>
-		-->
 	</path>
 
 	<target name="main" depends="pre_clean,updateKeys,make,javadoc,post_clean" description="cleans and runs the full build"/>
-
-	<condition property="generated.itemspecmodeling.exist">
-		<and>
-			<available file="${generated.itemspecmodeling.src}" type="dir"/>
-		</and>
-	</condition>
-	<condition property="generated.itemmodeling.exist">
-		<and>
-			<available file="${generated.itemmodeling.src}" type="dir"/>
-		</and>
-	</condition>
-	<condition property="generated.auditchange.exist">
-		<and>
-			<available file="${generated.auditchange.src}" type="dir"/>
-		</and>
-	</condition>
 
 	<target name="prepare">
 		<echo level="info">${ant.file}</echo>
@@ -59,53 +40,41 @@
 		<javac source="${javac.src}" target="${javac.src}" debug="${build.debug}" destdir="${core.classes}" srcdir="${core.src}"
             classpathref="classpath">
 			<include name="**/*.java" />
-			<exclude name="com/xingcloud/sfs/*.java" />
 		</javac>
+	</target>
+	
+	<condition property="immigrate.exist">
+		<and>
+			<available file="${immigrate}" type="file"/>
+		</and>
+	</condition>
+	<condition property="gencode.src.exist">
+		<and>
+			<available file="${gencode.path}/model" type="dir"/>
+		</and>
+	</condition>
+	
+	<target name="immigrate" depends=""  if="immigrate.exist" description="immigrate">
+		<unjar dest="${gencode.path}" src="${immigrate}" />
+		<echo level="info">copying skey and ckey</echo>
+		<copy todir="${core.classes}/${key.path}" file="${gencode.path}/${key.class}.class" overwrite="true"/>
 	</target>
 
-	<target name="compile_gen_model" description="compile_gen_model" if="generated.itemmodeling.exist">
-		<mkdir dir="${generated.itemmodeling.classes}"/>
-		<chmod file="${generated.itemmodeling.classes}" perm="ugo+rx"/>
-		<javac source="${javac.src}" target="${javac.src}" debug="${build.debug}" destdir="${generated.itemmodeling.classes}" srcdir="${generated.itemmodeling.src}"
-            includes="**/*.java" classpathref="classpath" classpath="${core.classes}">
-		</javac>
-		<copy todir="${core.classes}">
-			<fileset dir="${generated.itemmodeling.classes}"/>
-		</copy>
-	</target>
-    
-	<target name="compile_gen_specmodel" description="compile_gen_specmodel" if="generated.itemspecmodeling.exist">
-		<mkdir dir="${generated.itemspecmodeling.classes}"/>
-		<chmod file="${generated.itemspecmodeling.classes}" perm="ugo+rx"/>
-		<javac source="${javac.src}" target="${javac.src}" debug="${build.debug}" destdir="${generated.itemspecmodeling.classes}" srcdir="${generated.itemspecmodeling.src}"
-            includes="**/*.java" classpathref="classpath" classpath="${core.classes}">
-		</javac>
-		<copy todir="${core.classes}">
-			<fileset dir="${generated.itemspecmodeling.classes}"/>
-		</copy>
-	</target>
-
-	<target name="compile_gen_audit" description="compile_gen_audit" if="generated.auditchange.exist">
-		<mkdir dir="${generated.auditchange.classes}"/>
-		<chmod file="${generated.auditchange.classes}" perm="ugo+rx"/>
-        <javac source="${javac.src}" target="${javac.src}" debug="${build.debug}" destdir="${generated.auditchange.classes}" srcdir="${generated.auditchange.src}"
-            includes="**/*.java" classpathref="classpath" classpath="${core.classes}">
-		</javac>
-		<copy todir="${core.classes}">
-			<fileset dir="${generated.auditchange.classes}"/>
+	<target name="copy_gencode" depends="immigrate"  if="gencode.src.exist" description="copy_gencode">
+		<echo level="info">copying gen_code</echo>
+		<mkdir dir="${core.classes}/model"/>
+		<copy todir="${core.classes}/model" overwrite="true">
+			<fileset dir="${gencode.path}/model"/>
 		</copy>
 	</target>
 
-	<target name="make" depends="compile_core,compile_gen_model,compile_gen_specmodel,compile_gen_audit" description="compile and create compiler jars">
+	<target name="make" depends="compile_core,copy_gencode" description="compile and create compiler jars">
 		<echo message="Building libs"/>
 		<copy todir="${core.classes}" file="${core.path}/sdk-description.xml"/>
 		<jar file="${sdk.jar}" basedir="${core.classes}"
             includes="com/xingcloud/**/*,model/**/*,sdk-description.xml">
             <archives>
                 <zips>
-                	<!--
-                    <fileset dir="${sfs_lib.dir}" includes="**/*.jar"/>
-                    -->
                 	<fileset dir="${lib.dir}" includes="**/*.jar"/>
                 </zips>
             </archives>
@@ -118,13 +87,12 @@
 		</jar>
 	</target>
 
-    <property name="javadoc.sourcepath" value="${core.src}:${generated.auditchange.src}:${generated.itemmodeling.src}"/>
+    <property name="javadoc.sourcepath" value="${core.src}"/>
 
 	<target name="javadoc">
-		<echo message="${generated.auditchange.src}"/>
 		<javadoc access="public" author="false" classpath="${core.classes}" classpathref="classpath" destdir="${javadoc.path}" 
 	            doctitle="Xingcloud Android SDK" nodeprecated="false" nodeprecatedlist="false" 
-	            noindex="false" nonavbar="false" notree="false" packagenames="com.xingcloud.*,model.*" excludepackagenames="com.xingcloud.sfs.*"
+	            noindex="false" nonavbar="false" notree="false" packagenames="com.xingcloud.*"
 	            source="1.6" sourcepath="${javadoc.sourcepath}" splitindex="true" use="true" version="true">
 	    </javadoc>
 	</target>
@@ -132,14 +100,12 @@
 	<target name="pre_clean" description="pre_clean">
 		<delete failonerror="false" file="${sdk.jar}"/>
 		<delete failonerror="false" dir="${core.classes}"/>
-		<delete failonerror="false" dir="${generated.itemmodeling.classes}"/>
-		<delete failonerror="false" dir="${generated.auditchange.classes}"/>
+		<delete failonerror="false" dir="${gencode.path}"/>
 	</target>
 
 	<target name="post_clean" description="post_clean">
 		<delete failonerror="false" dir="${core.classes}"/>
-		<delete failonerror="false" dir="${generated.itemmodeling.classes}"/>
-		<delete failonerror="false" dir="${generated.auditchange.classes}"/>
+		<delete failonerror="false" dir="${gencode.path}"/>
 	</target>
 	
 	<target name="updateKeys" description="updateKeys">

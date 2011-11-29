@@ -40,6 +40,7 @@
 	<target name="compile_core" depends="prepare" description="compile_core">
 		<javac source="${javac.src}" target="${javac.src}" debug="${build.debug}" destdir="${core.classes}" srcdir="${core.src}"
             classpathref="classpath">
+            <compilerarg  line="-encoding UTF-8"/>
 			<include name="**/*.java" />
 		</javac>
 	</target>
@@ -91,7 +92,7 @@
     <property name="javadoc.sourcepath" value="${core.src}"/>
 
 	<target name="javadoc" if="gendoc">
-		<javadoc access="public" author="false" classpath="${core.classes}" classpathref="classpath" destdir="${javadoc.path}" 
+		<javadoc access="public" author="false" additionalparam="-encoding utf-8 -charset utf-8" classpath="${core.classes}" classpathref="classpath" destdir="${javadoc.path}" 
 	            doctitle="Xingcloud Android SDK" nodeprecated="false" nodeprecatedlist="false" 
 	            noindex="false" nonavbar="false" notree="false" packagenames="com.xingcloud.*"
 	            source="1.6" sourcepath="${javadoc.sourcepath}" splitindex="true" use="true" version="true">

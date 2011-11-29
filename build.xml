@@ -8,6 +8,7 @@
 	<property name="ckey" value="#consumer_key#" />
 	<!-- immigrate from old xingcloud sdk -->
 	<property name="immigrate" value=""/>
+	<property name="genDoc" value="" />
 
 	<property name="javac.src" value="1.6"/>
 	<property name="javadoc.path" value="${basedir}/doc"/>
@@ -48,9 +49,9 @@
 			<available file="${immigrate}" type="file"/>
 		</and>
 	</condition>
-	<condition property="gencode.src.exist">
+	<condition property="gendoc">
 		<and>
-			<available file="${gencode.path}/model" type="dir"/>
+			<istrue value="${genDoc}"/>
 		</and>
 	</condition>
 	
@@ -60,10 +61,10 @@
 		<copy todir="${core.classes}/${key.path}" file="${gencode.path}/${key.class}.class" overwrite="true"/>
 	</target>
 
-	<target name="copy_gencode" depends="immigrate"  if="gencode.src.exist" description="copy_gencode">
+	<target name="copy_gencode" depends="immigrate" description="copy_gencode">
 		<echo level="info">copying gen_code</echo>
 		<mkdir dir="${core.classes}/model"/>
-		<copy todir="${core.classes}/model" overwrite="true">
+		<copy todir="${core.classes}/model" overwrite="true" failonerror="false">
 			<fileset dir="${gencode.path}/model"/>
 		</copy>
 	</target>
@@ -89,7 +90,7 @@
 
     <property name="javadoc.sourcepath" value="${core.src}"/>
 
-	<target name="javadoc">
+	<target name="javadoc" if="gendoc">
 		<javadoc access="public" author="false" classpath="${core.classes}" classpathref="classpath" destdir="${javadoc.path}" 
 	            doctitle="Xingcloud Android SDK" nodeprecated="false" nodeprecatedlist="false" 
 	            noindex="false" nonavbar="false" notree="false" packagenames="com.xingcloud.*"

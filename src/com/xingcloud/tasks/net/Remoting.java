@@ -87,6 +87,11 @@ public class Remoting extends Task {
 				client.setHttpRequestRetryHandler(myRetryHandler.get());
 				HttpProtocolParams.setUseExpectContinue(client.getParams(), false);
 				httpRequest.addHeader("Accept-Encoding", "gzip");
+				//处理cmwap代理连接
+				if (Config.getConfig("X-Online-Host") != null
+						&& ((String) Config.getConfig("X-Online-Host")).length() > 0){
+					httpRequest.addHeader("X-Online-Host",Config.getConfig("X-Online-Host").toString());
+				}
 				if(zipRemotingContent)
 					httpRequest.addHeader("Content-Encoding","gzip");
 				httpResponse = client.execute(httpRequest);

@@ -4,6 +4,8 @@ package com.xingcloud.items.spec;
  * 单个物品定义的基类
  * */
 public class ItemSpec extends ItemBase {
+	
+	protected String groupID="";
 
 	public ItemSpec() {
 		super();
@@ -15,8 +17,11 @@ public class ItemSpec extends ItemBase {
 	 * @return 
 	 * 
 	 */	
-	public Boolean inGroup(String _group)
+	public boolean inGroup(String _group)
 	{
+		if(!groupID.equals(""))
+			return true;
+		
 		ItemGroup par=this.parent;
 		while(par!=null)
 		{
@@ -26,5 +31,16 @@ public class ItemSpec extends ItemBase {
 			par=par.parent;
 		}
 		return false;
+	}
+	
+	public String getGroupId()
+	{
+		return groupID;
+	}
+	
+	public void setGroupId(String id)
+	{
+		if(id!=null)
+			groupID = id;
 	}
 }

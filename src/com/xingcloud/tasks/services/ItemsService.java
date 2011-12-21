@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 
 import com.xingcloud.core.Config;
@@ -31,7 +33,6 @@ public class ItemsService extends FileService {
 	protected void handleSuccess(XingCloudEvent evt)
 	{
 		delFiles();
-		DbAssitant.instance().updateDatabase();
 		super.handleSuccess(evt);
 	}
 
@@ -41,7 +42,14 @@ public class ItemsService extends FileService {
 	 */
 	public void applyService(Object content)
 	{
+		DbAssitant.instance().updateDatabase();
 		ItemsParser.parse(content.toString());
+	}
+	
+	protected int checkDB()
+	{
+		SharedPreferences settings = XingCloud.instance().getActivity().getSharedPreferences("XingCloudSDK", Activity.MODE_PRIVATE);
+		return settings.getInt("dbcache", -1);
 	}
 
 	public boolean sendable()
@@ -50,19 +58,33 @@ public class ItemsService extends FileService {
 		{
 			String dbFile = Service.ITEMS+md5+XingCloud.instance().appVersionCode+".db";
 			String fileName=type+"?"+md5+XingCloud.instance().appVersionCode;
-			if(FileHelper.exist(fileName) || FileHelper.exist(dbFile))
+			int checkdb = checkDB();
+			
+			if((FileHelper.exist(fileName) || FileHelper.exist(dbFile)) && checkdb==2)
 			{
 				return false;
 			}
-			else if (!FileHelper.exist(dbFile)) 
+			else if (checkdb==1 || !FileHelper.exist(dbFile)) 
 			{
 				AssetManager assetManager = XingCloud.instance().getContext().getAssets();  
 		        try {
-		        	InputStream is = assetManager.open("xingcloud/"+dbFile);
+		        	InputStream is = assetManager.open("xingcloud/language/"+Config.languageType()+"/"+dbFile);
 		        	byte[] content = readFile(is);
 		        	FileHelper.save(dbFile, content);
 					return false;
 		        } catch (IOException e) {
+		        	
+		        	if(checkdb==1)
+		        	{
+		        		FileHelper.delete(fileName);
+		        	}
+		        	
+		        	//如果存在xml缓存，则也不从网络加载
+		        	if(!super.sendable())
+		        	{
+		        		return false;
+		        	}
+		        	
 		        	checkOldCache();
 					return true;
 				}

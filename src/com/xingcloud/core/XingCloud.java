@@ -65,6 +65,7 @@ public class XingCloud extends EventDispatcher {
 	 *是否需要对封装的服务请求、登录、和auditchange交互使用安全验证
 	 */
 	public static boolean needAuth=true;
+	public static boolean enableAuthDebug=false;
 	/**
 	 *当前玩家信息,是否采用覆盖UserProfile的方式，todo
 	 * */

@@ -112,7 +112,7 @@ public class FileService extends Service {
 		        try {  
 		        	
 					AssetManager assetManager = XingCloud.instance().getContext().getAssets();  
-		        	InputStream is = assetManager.open("xingcloud/"+Config.languageType()+"/"+type+".xml");
+		        	InputStream is = assetManager.open("xingcloud/language/"+Config.languageType()+"/"+type+".xml");
 		        	String contentString = readTextFile(is);
 		        	byte[] contentBytes = contentString.getBytes();
 		        	String existMD5 = Utils.MD5(contentBytes);

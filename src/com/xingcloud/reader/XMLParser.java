@@ -16,6 +16,11 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
+
+import com.xingcloud.core.Config;
+import com.xingcloud.core.XingCloud;
 import com.xingcloud.utils.DbAssitant;
 
 
@@ -43,11 +48,23 @@ public class XMLParser extends DefaultHandler
             currentNode.children.add(new XMLLeafNode(currentNode, string));
     }
     
-    public void endElement(String uri, String localName, String qName)
-            throws SAXException
-    {
-        currentNode = currentNode.parent;
-    }
+    public void startDocument()
+		     throws SAXException
+	{
+    	SharedPreferences settings = XingCloud.instance().getActivity().getSharedPreferences("XingCloudSDK", Activity.MODE_PRIVATE);
+    	SharedPreferences.Editor editor = settings.edit();  
+		editor.putInt("dbcache", 1);
+		editor.commit();
+	}
+    
+    public void endDocument()
+    		     throws SAXException
+	{
+    	SharedPreferences settings = XingCloud.instance().getActivity().getSharedPreferences("XingCloudSDK", Activity.MODE_PRIVATE);
+    	SharedPreferences.Editor editor = settings.edit();  
+		editor.putInt("dbcache", 2);
+		editor.commit();
+	}
 
     // DefaultHandler
     
@@ -101,6 +118,12 @@ public class XMLParser extends DefaultHandler
         node = null;
     }
     
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException
+    {
+        currentNode = currentNode.parent;
+    }
+
     public void storeDataToDb(XMLInternalNode node, String attsArray)
     {
     	if(node.isGroup())

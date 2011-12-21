@@ -246,9 +246,13 @@ public class DbAssitant {
                     it.setId(c.getString(c.getColumnIndex(ItemDbTable.TB_CLOUMN_ITEM_ID)));
                     
                     String attrs = c.getString(c.getColumnIndex(ItemDbTable.TB_CLOUMN_ITEM_ATTRIBUTES));
+                    String groupid = c.getString(c.getColumnIndex(ItemDbTable.TB_CLOUMN_GROUP_ID));
                     it = ItemsParser.getModel(attrs);
                     Utils.parseProperty(it, attrs);
-                    
+                    if(it instanceof ItemSpec)
+                    {
+                    	((ItemSpec) it).setGroupId(groupid);
+                    }
                     items.add(it);
                     it= null;
                    // result = c.getString(c.getColumnIndex(ItemDbTable.TB_CLOUMN_ITEM_ATTRIBUTES));
@@ -496,11 +500,13 @@ public class DbAssitant {
                     it.setId(c.getString(c.getColumnIndex(ItemDbTable.TB_CLOUMN_ITEM_ID)));
                     
                     String attrs = c.getString(c.getColumnIndex(ItemDbTable.TB_CLOUMN_ITEM_ATTRIBUTES));
+                    String groupid = c.getString(c.getColumnIndex(ItemDbTable.TB_CLOUMN_GROUP_ID));
                     it = ItemsParser.getModel(attrs);
                     Utils.parseProperty(it, attrs);
                     if((it instanceof ItemSpec)&&(itemId.equals(((ItemSpec)it).getId())))
                     {
                     	itemSpec = (ItemSpec)it;
+                    	itemSpec.setGroupId(groupid);
                     }
                     it= null;
                    // result = c.getString(c.getColumnIndex(ItemDbTable.TB_CLOUMN_ITEM_ATTRIBUTES));
@@ -556,6 +562,8 @@ public class DbAssitant {
                 {
                     c.moveToPosition(i);
                     String attrs = c.getString(c.getColumnIndex(ItemDbTable.TB_CLOUMN_ITEM_ATTRIBUTES));
+                    String groupid = c.getString(c.getColumnIndex(ItemDbTable.TB_CLOUMN_GROUP_ID));
+
                     if(attrs.contains(name.trim()))
                     {
                     	 it= new ItemBase();
@@ -565,6 +573,7 @@ public class DbAssitant {
                          if(it instanceof ItemSpec)
                          {
                         	 itemSpec = (ItemSpec)it;
+                        	 itemSpec.setGroupId(groupid);
                         	 itemSpecArray.add(itemSpec);
                         	 itemSpec = null;
                          }

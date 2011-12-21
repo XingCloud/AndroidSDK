@@ -39,6 +39,7 @@ import android.util.Log;
 
 import com.xingcloud.core.Config;
 import com.xingcloud.core.SecurityKey;
+import com.xingcloud.core.XingCloud;
 import com.xingcloud.items.spec.AsObject;
 import com.xingcloud.tasks.base.Task;
 import com.xingcloud.utils.Base64;
@@ -422,6 +423,8 @@ public class Remoting extends Task {
 			// 用sha1的方法生成消息码
 			baseBase64 = MyCrypte.messageCertify(baseSha1, "HmacSHA1",
 					SecurityKey.secretKey, false);
+			if(XingCloud.enableAuthDebug)
+				XingCloudLogger.log(XingCloudLogger.DEBUG, "Remoting->generateHeaders : "+baseSha1);
 			// 用base64的方法生成摘要
 			// sun.misc.BASE64Encoder base64Encoder=new
 			// sun.misc.BASE64Encoder();

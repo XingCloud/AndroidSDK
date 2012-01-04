@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Iterator;
@@ -24,8 +26,11 @@ import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.ExecutionContext;
@@ -87,6 +92,7 @@ public class Remoting extends Task {
 				client.setHttpRequestRetryHandler(myRetryHandler.get());
 				HttpProtocolParams.setUseExpectContinue(client.getParams(), false);
 				httpRequest.addHeader("Accept-Encoding", "gzip");
+
 				//处理cmwap代理连接
 				if (Config.getConfig("X-Online-Host") != null
 						&& ((String) Config.getConfig("X-Online-Host")).length() > 0){
@@ -374,6 +380,8 @@ public class Remoting extends Task {
 			}
 			 */
 		}
+		
+		_params = null;
 	}
 
 	private String generateHeaders(String urlString, AsObject params,
@@ -486,6 +494,10 @@ public class Remoting extends Task {
 		if (statusCode == 401) {
 			this.notifyError("Remoting->processResponse : Authorization error",null);
 			return;
+		} 
+		else if (statusCode == 403) {
+			this.notifyError("Remoting->processResponse : Session error",null);
+			return;
 		} else if (statusCode != 200) {
 			try {
 				this.notifyError("Remoting->processResponse : Error - "
@@ -520,13 +532,13 @@ public class Remoting extends Task {
 					{
 						out.write(buf, 0, i);
 					}
-					response = RemotingResponse.fromBytes(out.toByteArray().clone());
+					response = RemotingResponse.fromBytes(out.toByteArray());
 					out.close();
 					ungzippedResponse.close();
 
 				} 
 				else {
-					response = RemotingResponse.fromBytes(EntityUtils.toByteArray(resp.getEntity()).clone());
+					response = RemotingResponse.fromBytes(EntityUtils.toByteArray(resp.getEntity()));
 				}
 			}
 		} catch (IOException e) {
@@ -553,6 +565,9 @@ public class Remoting extends Task {
 		{
 			this.notifyError("Remoting->processResponse : "+response.getMessage(),null);
 		}
+		
+		//************************ memory leak solution test
+		response = null;
 	}
 
 	/**

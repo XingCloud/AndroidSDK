@@ -203,17 +203,17 @@ public class Resource {
 	{
 		return _priority;
 	}
-	/**
-	 * 获取已加载的数据（原始格式）
-	 * @return byte数据
-	 */
-	public byte[] getRawContent()
-	{
-		if(_response!=null)
-			return _response.getRawData();
-		else
-			return null;
-	}
+//	/**
+//	 * 获取已加载的数据（原始格式）
+//	 * @return byte数据
+//	 */
+//	public byte[] getRawContent()
+//	{
+//		if(_response!=null)
+//			return _response.getRawData();
+//		else
+//			return null;
+//	}
 	private void onFailed(TaskEvent E)
 	{
 		_failed=true;

@@ -20,7 +20,7 @@ public class RemotingResponse {
 	public static RemotingResponse fromBytes(byte[] resp)
 	{
 		RemotingResponse response=new RemotingResponse();
-		response.rawData = resp;
+		//response.rawData = resp;
 		response.content = new String(resp);
 		return response;
 	}
@@ -28,7 +28,7 @@ public class RemotingResponse {
 	public static RemotingResponse fromString(String resp)
 	{
 		RemotingResponse response=new RemotingResponse();
-		response.rawData = resp.getBytes();
+		//response.rawData = resp.getBytes();
 		response.content = resp;
 		return response;
 	}
@@ -60,7 +60,7 @@ public class RemotingResponse {
 	 */
 	private String message;  
 
-	private byte[] rawData;
+	//private byte[] rawData;
 
 	private RemotingResponse()
 	{
@@ -68,7 +68,7 @@ public class RemotingResponse {
 
 	private void analyzeContent(AsObject contentAsObj)
 	{
-		if(contentAsObj.toJSONString().equals("{}"))
+		if(contentAsObj.properties.isEmpty())
 		{
 			id = -1;
 			code = 200;
@@ -164,10 +164,10 @@ public class RemotingResponse {
 		return message;
 	}
 
-	public byte[] getRawData ()
-	{
-		return rawData;
-	}
+//	public byte[] getRawData ()
+//	{
+//		return rawData;
+//	}
 
 	public boolean isSuccess()
 	{

@@ -4,13 +4,21 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.xingcloud.analytic.CloudAnalytic;
 import com.xingcloud.items.spec.AsObject;
 
 public class Utils {
@@ -97,7 +105,7 @@ public class Utils {
 			ifl.setInput(source);
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream(source.length);
-			
+
 			while((!ifl.finished()))
 			{
 				byte[] buff = new byte[1024];
@@ -118,7 +126,7 @@ public class Utils {
 			return null;
 		}
 	}
-	
+
 	public static byte[] ungzip(byte[] source)
 	{
 		ByteArrayInputStream input = new ByteArrayInputStream(source);
@@ -131,7 +139,7 @@ public class Utils {
 			{
 				out.write(buf, 0, i);
 			}
-			
+
 			byte[] output = out.toByteArray().clone();
 			out.close();
 			input.close();
@@ -141,8 +149,55 @@ public class Utils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 
+	public static String generateUUID(Context context) {
+		if (context == null)
+		{
+			return "";
+		}
+		String deviceUUID = "";
+		try {
+			TelephonyManager tm = (TelephonyManager)context.getSystemService("phone");
+			String deviceId = tm.getDeviceId();
+
+			UUID uuid = UUID.randomUUID();
+			String uuidStr = uuid.toString().replaceAll("-", "").substring(0, 15);
+			WifiManager wifi = (WifiManager)context.getSystemService("wifi");
+			WifiInfo info = wifi.getConnectionInfo();
+			String wifiMAC = info.getMacAddress();
+			if (wifiMAC != null)
+			{
+				wifiMAC = wifiMAC.replaceAll("\\.|:", "");
+			}
+
+			if ((deviceId == null) || (TextUtils.isEmpty(deviceId.trim())))
+			{
+				if ((wifiMAC != null) && (!(TextUtils.isEmpty(wifiMAC))))
+				{
+					deviceUUID = "-" + wifiMAC;
+				}
+				else
+				{
+					deviceUUID = uuidStr;
+				}
+			}
+			else
+			{
+				if ((wifiMAC != null) && (!(TextUtils.isEmpty(wifiMAC))))
+				{
+					deviceUUID = deviceId + "-" + wifiMAC;
+				}
+				else
+				{
+					deviceUUID = deviceId + "-" + uuidStr;
+				}
+			}
+		} catch(Exception e){
+			deviceUUID = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 15);;
+		}
+		return deviceUUID;
+	}
 }

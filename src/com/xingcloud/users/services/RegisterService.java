@@ -1,6 +1,7 @@
 package com.xingcloud.users.services;
 
 import com.xingcloud.core.Config;
+import com.xingcloud.core.XingCloud;
 import com.xingcloud.event.IEventListener;
 import com.xingcloud.event.XingCloudEvent;
 import com.xingcloud.items.spec.AsObject;
@@ -27,7 +28,7 @@ public class RegisterService extends Service {
 		{
 			throw new Error("RegisterService --> no username or password specified.");
 		}
-		
+		XingCloud.instance().getSessionId(true);
 		account.setProperty("password", Utils.generateProtectedPassword(password.toString()));
 		userinfoData.setProperty("account", account);
 		this.params.setProperty("data", userinfoData);

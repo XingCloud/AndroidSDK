@@ -27,6 +27,7 @@ public class LoginService extends Service {
 		super(USER_LOGIN, onSuccess, onFail, RemotingMethod.POST);
 		user = username;
 		this.command = Config.LOGIN_SERVICE;
+		XingCloud.instance().getSessionId(true);
 		this.params.setProperty("data", new AsObject("{'username':'"+username+"','password':'"+Utils.generateProtectedPassword(password)+"'}"));
 	}
 	

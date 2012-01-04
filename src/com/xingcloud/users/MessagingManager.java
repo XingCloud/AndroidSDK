@@ -150,7 +150,7 @@ public class MessagingManager {
 			for(int i=0;i<_messages.size();i++){
 				if(enableQueued && i>=minLength)
 					break;
-				
+
 				RemotingMessage msg=_messages.get(i);
 				if(msg.sended) 
 					continue;
@@ -169,7 +169,7 @@ public class MessagingManager {
 				public void performEvent(XingCloudEvent evt) {
 					evt.getTarget().removeEventListener(TaskEvent.TASK_COMPLETE, this);
 					evt.getTarget().removeEventListener(TaskEvent.TASK_ERROR, this);
-					handleBatchResult(((Remoting)evt.getTarget()).getCurrentRemotingID(),((Remoting)evt.getTarget()).response.getData());
+					handleBatchResult((Remoting)evt.getTarget(),((Remoting)evt.getTarget()).response.getData());
 				}
 
 				@Override
@@ -187,7 +187,7 @@ public class MessagingManager {
 				public void performEvent(XingCloudEvent evt) {
 					evt.getTarget().removeEventListener(TaskEvent.TASK_COMPLETE, this);
 					evt.getTarget().removeEventListener(TaskEvent.TASK_ERROR, this);
-					handleBatchResult(((Remoting)evt.getTarget()).getCurrentRemotingID(),null);
+					handleBatchResult((Remoting)evt.getTarget(),null);
 				}
 
 				@Override
@@ -245,14 +245,14 @@ public class MessagingManager {
 	 *            --message
 	 *            --data
 	 * */
-	synchronized protected void handleBatchResult(int id,Object data)
+	synchronized protected void handleBatchResult(Remoting remoting,Object data)
 	{
 		messageReceived = true;
 
-		ArrayList<RemotingMessage> auditBatch=messageBatches.get(String.valueOf(id));
+		ArrayList<RemotingMessage> auditBatch=messageBatches.get(String.valueOf(remoting.getCurrentRemotingID()));
 		if(auditBatch==null)
 		{
-			onBatchFail("Not exist batch id "+id);
+			onBatchFail("Not exist batch id "+remoting.getCurrentRemotingID());
 		}
 		else
 		{
@@ -283,6 +283,12 @@ public class MessagingManager {
 				{
 					MessagingEvent msg_evt = new MessagingEvent(null);
 					msg_evt.setData(data);
+					if(remoting.response!=null)
+					{
+						msg_evt.code=remoting.response.getCode();
+						msg_evt.message=remoting.response.getMessage();
+					}
+
 					msg.handleDataBack(msg_evt);
 				}
 
@@ -395,12 +401,12 @@ public class MessagingManager {
 		timer.cancel();
 		timer = null;
 	}
-	
+
 	synchronized public void pause()
 	{
 		_paused=true;
 	}
-	
+
 	synchronized public void resume()
 	{
 		_paused = false;

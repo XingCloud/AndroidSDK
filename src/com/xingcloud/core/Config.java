@@ -82,35 +82,44 @@ public class Config {
 	{
 		//ABTest参数
 		String abtest=Config.getStringConfig("xa_target");
-		
+
 		//平台应用id
 		String platformAppId=Config.getStringConfig("platefrom_app_id");
-		
+
 		//平台用户uid
 		String platformUserId=Config.getStringConfig("sig_user");
-		
+
 		//用户uid
 		String gameUserId="";
 		if(XingCloud.ownerUser!=null)
 			gameUserId = XingCloud.ownerUser.getUid();
-		
+
 		String lang = Config.getStringConfig("lang");
-		
+
 		AsObject result = new AsObject();
 		result.setProperty("platformAppId", platformAppId);
 		result.setProperty("platformUserId", platformUserId);
 		result.setProperty("gameUserId", gameUserId);
 		result.setProperty("abtest", abtest);
 		result.setProperty("lang", lang);
+		//session参数
+		if(XingCloud.sessionEnabled)
+		{
+			String session = XingCloud.instance().getSessionId(false);
+			if(!session.equals(""))
+			{
+				result.setProperty("sid", session);
+			}
+		}
 		
 		return result;
 	}
-	
+
 	public static String extraParams()
 	{
 		return Config.getStringConfig("extraParams");
 	}
-	
+
 	/**
 	 * file服务调用的gateway
 	 * 
@@ -154,18 +163,18 @@ public class Config {
 	{
 		return (String)Config.getConfig("help");
 	}
-	
+
 	/**
 	 * 进行基本配置的初始化，包括安全验证参数
 	 * @param config 游戏基本配置文件
 	 */
-	
+
 	public static void init(JSONObject config)
 	{
 		Config.parseFromJSON(config);
 		do_init();
 	}
-	
+
 	private static void do_init()
 	{
 		//初始化gateway
@@ -190,14 +199,14 @@ public class Config {
 	public static void parseFromXML(NodeList xmlConfig) {
 		if(xmlConfig==null)
 			return ;
-		
+
 		int length = xmlConfig.getLength();
 		for(int i=0;i<length;i++)
 		{
 			Node n = xmlConfig.item(i);
 			if(n.getNodeType()!=Node.ELEMENT_NODE)
 				continue;
-			
+
 			Config.setConfig(n.getNodeName(), ((Text)n).getNodeValue());
 		}
 	}
@@ -212,7 +221,7 @@ public class Config {
 			Config.local.put("xa_target", "4125");
 			return ;
 		}
-		
+
 		Iterator it = config.keys();
 		while(it.hasNext())
 		{
@@ -220,9 +229,9 @@ public class Config {
 			Object value;
 			try {
 				value = config.get(key);
-				
+
 				Config.setConfig(key, value.toString());
-				
+
 			} catch (JSONException e) {
 				continue;
 			}
@@ -244,7 +253,7 @@ public class Config {
 	{
 		return Config.getConfig("gateway")+"/rest";
 	}
-	
+
 	/**
 	 *设置参数 
 	 * @param name 参数名
@@ -253,7 +262,7 @@ public class Config {
 	 */		
 	public static void setConfig(String name, Object value) {
 		Config.local.put(name, value);
-		
+
 		if(name.equals("gateway"))
 		{
 			Remoting.defaultGateway = Config.restGateway();
@@ -269,7 +278,7 @@ public class Config {
 		_serverTime = time;
 		_syncTime = System.currentTimeMillis();
 	}
-	
+
 	public static boolean localGDP()
 	{
 		Object local = Config.getConfig("localGDP");

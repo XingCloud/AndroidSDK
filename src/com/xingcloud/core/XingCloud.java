@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -28,6 +29,7 @@ import com.xingcloud.tasks.services.ServiceManager;
 import com.xingcloud.users.AbstractUserProfile;
 import com.xingcloud.users.actions.ActionManager;
 import com.xingcloud.users.auditchanges.AuditChangeManager;
+import com.xingcloud.utils.Utils;
 
 /**
  * XingCloud核心类，用于初始化和启动XingCloud各种服务功能
@@ -81,6 +83,26 @@ public class XingCloud extends EventDispatcher {
 	public static String SFS_XINGCLOUD_SERVICE_TOKEN = "service";
 	public static String SFS_XINGCLOUD_ZONE = "Game" + "";
 	 */
+	
+	public static boolean sessionEnabled = false;
+	private String sessionId = "";
+	public String getSessionId(boolean autoCreate){
+		if(sessionEnabled && autoCreate && sessionId.equals(""))
+		{
+			generateSeesion();
+		}
+		return sessionId;
+	}
+	
+	public String generateSeesion(){
+		sessionId = Utils.MD5((System.currentTimeMillis()+Utils.generateUUID(_context)).getBytes());
+//		SharedPreferences pref = context.getSharedPreferences("xcuuid", 0);
+//		if ((pref != null) && (pref.getString("uuid", "") != null) && (pref.getString("uuid", "").trim().length() > 0))
+//		{
+//			return pref.getString("uuid", "");
+//		}
+		return sessionId;
+	}
 
 	/**
 	 * 是否自动加载Item资源文件

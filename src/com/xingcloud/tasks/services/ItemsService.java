@@ -60,7 +60,7 @@ public class ItemsService extends FileService {
 			String fileName=type+"?"+md5+XingCloud.instance().appVersionCode;
 			int checkdb = checkDB();
 			
-			if((FileHelper.exist(fileName) || FileHelper.exist(dbFile)) && checkdb==2)
+			if((FileHelper.exist(fileName) || FileHelper.exist(dbFile)) && checkdb!=1)
 			{
 				return false;
 			}

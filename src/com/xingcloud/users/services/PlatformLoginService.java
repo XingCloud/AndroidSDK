@@ -64,6 +64,7 @@ public class PlatformLoginService extends Service {
 			this.command = Config.PLATFORM_LOGIN_SERVICE;
 		XingCloud.instance().getSessionId(true);
 		this.prof = prof;
+		extra = extraParams;
 		if(extra!=null)
 			this.params.properties.putAll(extraParams.properties);
 	}

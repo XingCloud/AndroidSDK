@@ -43,7 +43,7 @@ public class Reflection {
 				Field f = fs[i];
 				if(f.getName().equals("properties"))
 					continue;
-
+                
 				boolean originAccess = f.isAccessible();
 				f.setAccessible(true);
 				if(excluded==null || !(excluded.contains(f.getName())))
@@ -62,10 +62,10 @@ public class Reflection {
 					Reflection.setProperty(target,key,value);
 			}
 		} catch(Exception e) {
-
+            
 		}
 	}
-
+    
 	/**
 	 * 从AsObject中获取指定名字的属性
 	 * 如果该属性为getter/setter方式进行存储，则从getter中获取
@@ -90,9 +90,9 @@ public class Reflection {
 				Method m_get = obj.getClass().getMethod("get"+toCapitalString(propName));
 				return m_get.invoke(obj);
 			} catch (Exception e2) {
-
+                
 			}
-
+            
 			if(obj.properties.containsKey(propName))
 				return obj.properties.get(propName);
 		}
@@ -131,13 +131,13 @@ public class Reflection {
 		
 		return newMap;
 	}
-
+    
 	private static Object parseArrayProperty(JSONArray propValueArr,Class propCls)
 	{
 		if(propValueArr==null || propValueArr.length()==0 || propCls==null)
 			return new AsObject();
-
-
+        
+        
 		int propJsonLength = propValueArr.length();
 		
 		try {
@@ -176,7 +176,7 @@ public class Reflection {
 				Array.set(newArr, propJsonI,null);
 				continue;
 			}
-
+            
 			if(value instanceof JSONArray)
 			{
 				if(propCls.isArray())
@@ -203,7 +203,7 @@ public class Reflection {
 				{
 					Array.set(newArr, propJsonI,null);
 				}
-
+                
 				continue;
 			}
 			
@@ -213,7 +213,7 @@ public class Reflection {
 				Array.set(newArr, propJsonI,null);
 				continue;
 			}
-
+            
 			if(propCompoStr.equals("int") || propCompoStr.equals("java.lang.Int"))
 			{
 				Array.set(newArr, propJsonI,Integer.parseInt(valueStr));
@@ -248,23 +248,23 @@ public class Reflection {
 			}
 			else
 				Array.set(newArr, propJsonI,valueStr);
-
+            
 		}
-
+        
 		return newArr;
-
-
+        
+        
 	}
-
+    
 	private static Object parseProperty(Class propCls,Object propValue)
 	{
 		String type = propCls.getCanonicalName();
-
+        
 		String propValueStr = propValue.toString();
-
+        
 		if(propValueStr.equals("") || propValueStr.equals("null"))
 			return null;
-
+        
 		try {
 			if(propCls.isArray())
 			{
@@ -293,7 +293,7 @@ public class Reflection {
 			return null;
 		}
 	}
-
+    
 	/**
 	 * 设置AsObject的属性
 	 * 如果该属性为getter/setter方式进行存储，则调用setter进行设置
@@ -374,16 +374,26 @@ public class Reflection {
 					}
 					m_set.invoke(obj, item);
 				}
+				else if((type.equals("java.util.Map") || type.equals("java.util.HashMap")) && (propValue instanceof AsObject))
+				{
+					m_set.invoke(obj,parseProperty(m_get.getReturnType(),((AsObject)propValue).toJSON()));
+				}
+                else if(propValue==null || propValue==JSONObject.NULL)
+                {
+                	Object[] param = {null};
+                    m_set.invoke(obj, param);
+                }
 				else
 				{
 					m_set.invoke(obj, propValue);
 				}
-
+                
 				return;
 			}  catch (Exception e1) {
+				//e1.printStackTrace();
 			}
-
-
+            
+            
 			if(obj.properties.containsKey(propName))
 			{
 				obj.properties.remove(propName);
@@ -393,7 +403,7 @@ public class Reflection {
 			
 		}
 	}
-
+    
 	/**
 	 * 通过反射获取去除package的类名
 	 * @param <E>
@@ -406,11 +416,11 @@ public class Reflection {
 		int index = clsName.lastIndexOf(".");
 		return clsName.substring(index+1, clsName.length());
 	}
-
+    
 	private static String toCapitalString(String str)
 	{
 		return str.substring(0,1).toUpperCase()+str.substring(1,str.length());
 	}
-
-
+    
+    
 }

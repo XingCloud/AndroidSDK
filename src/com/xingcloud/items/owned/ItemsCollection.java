@@ -193,6 +193,10 @@ public class ItemsCollection<E> extends ArrayCollection<E>
 
 		Remoting rem = (Remoting)evt.getTarget();
 		Object dataObj = rem.response.getData();
+		Object mappingObj = rem.response.getMapping();
+		AsObject mappingAsObj = null;
+		if(mappingObj!=null)
+			mappingAsObj = (AsObject)mappingObj;
 		if(dataObj!=null)
 		{
 			this.clear();
@@ -206,6 +210,19 @@ public class ItemsCollection<E> extends ArrayCollection<E>
 					Object value = ent.getValue();
 					if(value instanceof AsObject)
 					{
+						if(mappingAsObj!=null)
+						{
+							Iterator itobj = ((AsObject)mappingAsObj).properties.entrySet().iterator();
+							while(itobj.hasNext())
+							{
+								Entry entobj = (Entry)itobj.next();
+								String objKey = (String) entobj.getKey();
+								Object objcontent = entobj.getValue();
+								((AsObject)value).setProperty((String)objcontent, ((AsObject)value).getProperty(objKey));
+								((AsObject)value).properties.remove(objKey);
+							}
+						}
+						
 						Object uidObj = ((AsObject)value).getProperty("uid");
 						if(uidObj!=null)
 						{

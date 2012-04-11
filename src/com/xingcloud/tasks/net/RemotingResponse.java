@@ -42,6 +42,7 @@ public class RemotingResponse {
 	 * 执行一个message后可能会返回的数据（Object）
 	 */
 	private Object data;
+	private Object mapping;
 	//public HttpResponse httpResponse;
 	private int httpResponseCode = -1;
 	
@@ -74,6 +75,7 @@ public class RemotingResponse {
 			code = 200;
 			message = "";
 			data = null;
+			mapping = null;
 		}
 		else
 		{
@@ -99,6 +101,7 @@ public class RemotingResponse {
 			
 			message=contentAsObj.getStringProperty("message");
 			data = contentAsObj.getProperty("data");
+			mapping = contentAsObj.getProperty("mapping");
 		}
 	}
 
@@ -162,6 +165,14 @@ public class RemotingResponse {
 			analyzeContent(new AsObject(content));
 		}
 		return message;
+	}
+	public Object getMapping()
+	{
+		if(data==null)
+		{
+			analyzeContent(new AsObject(content));
+		}
+		return mapping;
 	}
 
 //	public byte[] getRawData ()

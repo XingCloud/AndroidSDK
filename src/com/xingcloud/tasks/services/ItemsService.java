@@ -17,6 +17,8 @@ import com.xingcloud.items.ItemsParser;
 import com.xingcloud.utils.DbAssitant;
 
 public class ItemsService extends FileService {
+	
+	public static String ITEMS_DB_EXTENSION = ".db";
 
 	public ItemsService(IEventListener onSuccess,IEventListener onFail) {
 		super(onSuccess, onFail);
@@ -56,21 +58,21 @@ public class ItemsService extends FileService {
 	{
 		if(XingCloud.enableCache)
 		{
-			String dbFile = Service.ITEMS+md5+XingCloud.instance().appVersionCode+".db";
+			String dbFile = Service.ITEMS+md5+XingCloud.instance().appVersionCode;
 			String fileName=type+"?"+md5+XingCloud.instance().appVersionCode;
 			int checkdb = checkDB();
 			
-			if((FileHelper.exist(fileName) || FileHelper.exist(dbFile)) && checkdb!=1)
+			if((FileHelper.exist(fileName) || FileHelper.exist(dbFile+".db")) && checkdb!=1)
 			{
 				return false;
 			}
-			else if (checkdb==1 || !FileHelper.exist(dbFile)) 
+			else if (checkdb==1 || !FileHelper.exist(dbFile+".db")) 
 			{
 				AssetManager assetManager = XingCloud.instance().getContext().getAssets();  
 		        try {
-		        	InputStream is = assetManager.open("xingcloud/language/"+Config.languageType()+"/"+dbFile);
+		        	InputStream is = assetManager.open("xingcloud/language/"+Config.languageType()+"/"+dbFile+ITEMS_DB_EXTENSION);
 		        	byte[] content = readFile(is);
-		        	FileHelper.save(dbFile, content);
+		        	FileHelper.save(dbFile+".db", content);
 					return false;
 		        } catch (IOException e) {
 		        	
